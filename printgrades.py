@@ -10,9 +10,9 @@ def print_grades(grades, average):
         try:
             moyenneG += average[matiere]
             coefG += 1
-            print('\nMoyenne = {:.2f}/20\n'.format(average[matiere]))
+            print(f'\nMoyenne = {average[matiere]:.2f}/20\n')
         except:
             print('\n')
     if coefG != 0:
-        toPrint = 'Moyenne générale : {:.2f}/20'.format(moyenneG / coefG)
+        toPrint = f'Moyenne générale : {moyenneG/coefG:.2f}/20'
         print(underline(toPrint))

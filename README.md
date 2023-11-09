@@ -4,7 +4,7 @@ Ce script se connecte à l'api d'Ecoledirecte avec votre nom d'utilisateur et vo
 ## Installation
 Ce script ne nessécite aucune installation particulière, vous pouvez cloner le dépot avec cette commande si vous possédez git mais vous pouvez toujour [télécharger le fichier zip](https://github.com/FU0X0/Ecoledirecte-api/archive/refs/heads/main.zip).
 ```
-git clone https://github.com/FU0X0/Ecoledirecte-api.git
+git clone https://github.com/FU0X0/Ecoledirecte-grades.git
 ```
 
 ## Prérequis

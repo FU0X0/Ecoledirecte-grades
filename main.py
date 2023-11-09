@@ -4,7 +4,7 @@ for i in range(3):
     username, password = get_creds()
     uid, token, error = login(username, password)
     if error:
-        print('\n{}\n'.format(error))
+        print(f'\n{error}\n')
         if i < 2:
             pass
         else:

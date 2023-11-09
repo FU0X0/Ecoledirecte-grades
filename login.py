@@ -9,7 +9,7 @@ def login(username:str, password:str):
         "uuid": ""
     }
     send = 'data=' + dumps(data)
-    request = req.post("https://api.ecoledirecte.com/v3/login.awp?v=3.43.0", headers={'User-Agent': useragent}, data=send)
+    request = req.post("https://api.ecoledirecte.com/v3/login.awp?", headers={'User-Agent': useragent}, data=send)
     if not request.json()["message"]:
         uid = str(request.json()['data']['accounts'][0]['id'])
         token = request.json()['token']
