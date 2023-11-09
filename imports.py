@@ -1,7 +1,7 @@
 from urllib.parse import quote as urlparsequote
 from getpass import getpass
 import requests as req
-import json
+from json import dumps
 import sys
 
 from getgrades import get_grades
@@ -13,7 +13,7 @@ __all__ = [
     'urlparsequote',
     'getpass',
     'req',
-    'json',
+    'dumps',
     'sys',
     'get_grades',
     'login',

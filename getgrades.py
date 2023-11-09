@@ -1,4 +1,4 @@
-from imports import json, req
+from imports import dumps, req
 from year import school_year
 def get_grades(uid, token):
     useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
@@ -6,49 +6,34 @@ def get_grades(uid, token):
     data = {
         "anneeScolaire": school_year(),
     }
-    send = 'data=' + json.dumps(data)
+    send = 'data=' + dumps(data)
     request = req.post(url, headers={'X-Token': token, 'User-Agent': useragent}, params={'verbe': 'get'}, data=send)
-    notes = {}
-    for note in request.json()['data']['notes']:
-        if not note['codeMatiere'] in notes:
-            notes.update({
-                note['codeMatiere']: {
-                    'notes': {
-                        note['devoir']: note['valeur'] + '/' + note['noteSur']
-                    },
+    grades = {}
+    for i in request.json()['data']['notes']:
+        if not i['codeMatiere'] in grades:
+            grades.update({
+                i['codeMatiere']: {
+                    'notes': {},
                     'moyenne': 0,
                     'coefTotal': 0
                 }
             })
-            if not note['enLettre'] and not note['nonSignificatif'] and note['valeur']:
-                if ',' in str(note['valeur']):
-                    note['valeur'] = note['valeur'].replace(",",".")
-                notes[note['codeMatiere']].update({
-                    'moyenne': float(note['valeur']) / int(note['noteSur']) * float(note['coef']),
-                    'coefTotal': float(note['coef'])
-                })
-            if note['libelleMatiere'] != '':
-                notes[note['codeMatiere']]['name'] = note['libelleMatiere']
+            if i['libelleMatiere']:
+                grades[i['codeMatiere']]['name'] = i['libelleMatiere']
             else:
-                notes[note['codeMatiere']]['name'] = note['codeMatiere']
-        else:
-            notes[note['codeMatiere']]['notes'].update({
-                note['devoir']: note['valeur'] + '/' + note['noteSur']
+                grades[i['codeMatiere']]['name'] = i['codeMatiere']
+        if i['valeur']:
+            grades[i['codeMatiere']]['notes'].update({
+                i['devoir']: i['valeur'] + '/' + i['noteSur']
             })
-            if not note['enLettre'] and not note['nonSignificatif'] and note['valeur']:
-                if ',' in str(note['valeur']):
-                    n = ''
-                    for i in note['valeur']:
-                        if i == ',':
-                            i = '.'
-                        n += i
-                    note['valeur'] = n
-                notes[note['codeMatiere']]['moyenne'] += float(note['valeur']) / int(note['noteSur']) * float(note['coef'])
-                notes[note['codeMatiere']]['coefTotal'] += float(note['coef'])
-    moyenne = {}
-    for matiere in notes:
-        if notes[matiere]['moyenne'] and notes[matiere]['coefTotal']:
-            moyenne.update({
-                matiere: notes[matiere]['moyenne'] / notes[matiere]['coefTotal'] * 20
+        if not i['enLettre'] and not i['nonSignificatif'] and i['valeur']:
+            i['valeur'] = i['valeur'].replace(",",".")
+            grades[i['codeMatiere']]['moyenne'] += float(i['valeur']) / int(i['noteSur']) * float(i['coef'])
+            grades[i['codeMatiere']]['coefTotal'] += float(i['coef'])
+    average = {}
+    for matiere in grades:
+        if grades[matiere]['moyenne'] and grades[matiere]['coefTotal']:
+            average.update({
+                matiere: grades[matiere]['moyenne'] / grades[matiere]['coefTotal'] * 20
             })
-    return(notes, moyenne)
+    return(grades, average)
