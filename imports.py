@@ -1,22 +1,22 @@
-import subprocess
+from urllib.parse import quote as urlparsequote
+from getpass import getpass
+import requests as req
+import json
 import sys
 
-required_packages = [
+from getgrades import get_grades
+from login import login
+from printgrades import print_grades
+from creditentials import get_creds
+
+__all__ = [
     'urlparsequote',
     'getpass',
+    'req',
+    'json',
+    'sys',
     'get_grades',
     'login',
-    'print_grades'
+    'print_grades',
+    'get_creds'
 ]
-python = sys.executable
-def install(package):
-    subprocess.check_call([python, '-m', 'pip', 'install', package])
-
-def check_package(package):
-    reqs = subprocess.check_output([python, '-m', 'pip', 'freeze'])
-    installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-    if package not in installed_packages:
-        install(package)
-
-for package in required_packages:
-    check_package(package)

@@ -1,5 +1,4 @@
-import json
-import requests as req
+from imports import json, req
 from year import school_year
 def get_grades(uid, token):
     useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'

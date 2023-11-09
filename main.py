@@ -1,9 +1,8 @@
-from __init__ import urlparsequote, getpass, login, get_grades, print_grades
+from imports import getpass, login, get_grades, print_grades, get_creds
 uid, token = str, str
 for i in range(3):
-    username = input("Nom d'utilisateur : ")
-    password = urlparsequote(getpass("Mot de passe : "))
     try:
+        username, password = get_creds()
         uid, token = login(username, password)
         break
     except IndexError:
@@ -11,7 +10,7 @@ for i in range(3):
         if i < 2:
             pass
         else:
-            print('Too many errors, please retry in a few moments, exiting...')
+            getpass('Too many errors, please retry in a few moments, exiting...')
             exit(1)
 notes, moyenne = get_grades(uid, token)
 print_grades(notes, moyenne)
