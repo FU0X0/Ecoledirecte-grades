@@ -4,10 +4,10 @@ import requests as req
 from json import dumps
 import sys
 
-from getgrades import get_grades
-from login import login
 from printgrades import print_grades
 from creditentials import get_creds
+from getgrades import get_grades
+from login import login
 
 __all__ = [
     'urlparsequote',
@@ -16,7 +16,7 @@ __all__ = [
     'dumps',
     'sys',
     'get_grades',
-    'login',
+    'get_creds',
     'print_grades',
-    'get_creds'
+    'login'
 ]

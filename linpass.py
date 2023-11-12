@@ -15,11 +15,13 @@ def lin_getpass(prompt="Password: "):
             if ch in ['\n', '\r']:
                 sys.stdout.write('\n')
                 break
-            if ch == '\x7f':  # Backspace
+            elif ch == '\x7f':  # Backspace
                 if len(password) > 0:
                     password = password[:-1]
                     sys.stdout.write('\b \b')
                     sys.stdout.flush()
+            elif ch == '\x03':  # Handle Ctrl+C
+                raise KeyboardInterrupt
             else:
                 password += ch
                 sys.stdout.write('*')
@@ -27,7 +29,3 @@ def lin_getpass(prompt="Password: "):
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return password
-
-# Example usage:
-password = getpass()
-print('\rYou entered:', password)

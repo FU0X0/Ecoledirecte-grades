@@ -1,5 +1,6 @@
 from imports import dumps, req
 from year import school_year
+from average import Avg
 def get_grades(uid, token):
     useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
     url = f"https://api.ecoledirecte.com/v3/eleves/{uid}/notes.awp"
@@ -14,26 +15,28 @@ def get_grades(uid, token):
             grades.update({
                 i['codeMatiere']: {
                     'notes': {},
-                    'moyenne': 0,
-                    'coefTotal': 0
+                    'moyenne': Avg()
                 }
             })
             if i['libelleMatiere']:
                 grades[i['codeMatiere']]['name'] = i['libelleMatiere']
             else:
                 grades[i['codeMatiere']]['name'] = i['codeMatiere']
-        if i['valeur']:
+        if i['valeur'] and not i['enLettre']:
             grades[i['codeMatiere']]['notes'].update({
-                i['devoir']: i['valeur'] + '/' + i['noteSur']
+                i['devoir']: f"{i['valeur']}/{i['noteSur']}"
+            })
+        elif i['valeur'] and i['enLettre']:
+            grades[i['codeMatiere']]['notes'].update({
+                i['devoir']: i['valeur']
             })
         if not i['enLettre'] and not i['nonSignificatif'] and i['valeur']:
             i['valeur'] = i['valeur'].replace(",",".")
-            grades[i['codeMatiere']]['moyenne'] += float(i['valeur']) / int(i['noteSur']) * float(i['coef'])
-            grades[i['codeMatiere']]['coefTotal'] += float(i['coef'])
+            grades[i['codeMatiere']]['moyenne'].add(i['valeur'], i['noteSur'], i['coef'])
     average = {}
     for matiere in grades:
-        if grades[matiere]['moyenne'] and grades[matiere]['coefTotal']:
+        if grades[matiere]['moyenne'].get():
             average.update({
-                matiere: grades[matiere]['moyenne'] / grades[matiere]['coefTotal'] * 20
+                matiere: grades[matiere]['moyenne'].get()
             })
     return(grades, average)
