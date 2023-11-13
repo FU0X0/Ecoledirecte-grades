@@ -1,4 +1,4 @@
-from imports import getpass, urlparsequote
+from imports import urlparsequote
 from platform import system
 def get_creds():
     try:
@@ -12,7 +12,6 @@ def get_creds():
             from linpass import lin_getpass
             password = lin_getpass("Mot de passe : ")
         else:
-            getpass("Platform not supported, exiting...")
             exit(1)
     except KeyboardInterrupt:
         print('\nExiting...')
